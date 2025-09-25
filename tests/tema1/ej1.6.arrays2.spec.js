@@ -104,3 +104,34 @@ test.describe('Ejercicio 1.6.3: Combinación de arrays numéricos y asociativos 
         }
     });
 });
+
+test.describe('Ejercicio 1.6.4: Arrays multidimensionales', () => {
+    const URL = PATH + 'ej1.6.4.php';
+
+    test.beforeEach(async ({ page }) => {
+        await page.goto(URL);
+    });
+
+    test('Muestra el array construido con print_r', async ({ page }) => {
+        const preElement = await page.locator('pre').first();
+        // Check first and last rows to confirm structure
+        await expect(preElement).toContainText('Array\n(\n    [0] => Array\n        (\n            [0] => 1\n');
+        await expect(preElement).toContainText('[9] => 10\n        )\n\n');
+        await expect(preElement).toContainText('[15] => Array\n        (\n            [0] => 151\n');
+        await expect(preElement).toContainText('[9] => 160\n        )\n\n)\n');
+    });
+
+    test('La tabla muestra los números del 1 al 160', async ({ page }) => {
+        const rows = await page.locator('tbody tr').all();
+        expect(rows.length).toBe(16);
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = await rows[i].locator('td').all();
+            expect(cells.length).toBe(10);
+            for (let j = 0; j < cells.length; j++) {
+                const expectedNumber = i * 10 + j + 1;
+                await expect(cells[j]).toHaveText(String(expectedNumber));
+            }
+        }
+    });
+});

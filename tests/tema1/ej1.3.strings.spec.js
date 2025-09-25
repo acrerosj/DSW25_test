@@ -70,3 +70,23 @@ test.describe('Ejercicio 1.3.3: Uso de strlen() y str_replace()', () => {
     await expect(pElement).toHaveText('El gato corre por el parque y el gato ladra.');
   });
 });
+
+test.describe('Ejercicio 1.3.4: Formateo de cadenas con printf() y sprintf()', () => {
+  const exerciseUrl = `${PATH}ej1.3.4.php`;
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(exerciseUrl);
+  });
+
+  test('Debe mostrar el mensaje del producto formateado con printf()', async ({ page }) => {
+    const pElement = page.locator('p#mensajeProducto');
+    await expect(pElement).toBeVisible();
+    await expect(pElement).toHaveText('El producto Teclado Mecánico tiene un precio final de 64.59 euros.');
+  });
+
+  test('Debe mostrar el mensaje del descuento creado con sprintf()', async ({ page }) => {
+    const divElement = page.locator('div#textoDescuento');
+    await expect(divElement).toBeVisible();
+    await expect(divElement).toHaveText('El descuento aplicado es del 15%.');
+  });
+});
